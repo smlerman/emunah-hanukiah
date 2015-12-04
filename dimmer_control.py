@@ -18,7 +18,16 @@ LIGHT_MAP = {
     8: 23
 }
 
+ZERO_CROSS_COUNT = 0
+
 def zero_cross_detect(channel):
+    global ZERO_CROSS_COUNT
+    ZERO_CROSS_COUNT += 1
+    if ZERO_CROSS_COUNT < 2:
+        return
+    
+    ZERO_CROSS_COUNT = 0
+    
     # Get 9 random time lengths
     light_times = dict()
     
@@ -29,11 +38,11 @@ def zero_cross_detect(channel):
             
             full_or_partial_time = random.randint(0,1)
             if full_or_partial_time == 0:
-	        random_time = random.uniform(0.002777, 0.008333)
-	        if random_time not in light_times:
-	            light_times[random_time] = list()
-	        
-	        light_times[random_time].append(i)
+                random_time = random.uniform(0.002777, 0.008333)
+                if random_time not in light_times:
+                    light_times[random_time] = list()
+                
+                light_times[random_time].append(i)
         else:
             GPIO.output(LIGHT_MAP[i], GPIO.LOW)
     
@@ -65,14 +74,11 @@ LIGHT_STATES = read_light_state_file()
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(8, GPIO.IN)
 
-GPIO.setup(3, GPIO.OUT)
-GPIO.setup(5, GPIO.OUT)
-GPIO.setup(7, GPIO.OUT)
-GPIO.setup(11, GPIO.OUT)
+for pin in LIGHT_MAP.values():
+    GPIO.setup(pin, GPIO.OUT)
 
-#GPIO.add_event_detect(8, GPIO.RISING, callback=zero_cross_detect)
+GPIO.add_event_detect(8, GPIO.RISING, callback=zero_cross_detect)
 
 while True:
-    time.sleep(1.0/60)
+    time.sleep(1)
     LIGHT_STATES = read_light_state_file()
-    zero_cross_detect(8)

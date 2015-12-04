@@ -184,7 +184,7 @@ def application(environ, start_response):
     return [output]
 
 def board_init():
-    subprocess.check_call(["sudo", "/var/www/html/menorah/board_init.py"])
+    subprocess.check_call(["sudo", "/var/www/html/menorah/board_init.sh"])
     
     return "board_init"
 
