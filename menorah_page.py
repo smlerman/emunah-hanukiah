@@ -1,7 +1,6 @@
+import json
 import subprocess
 import urlparse
-
-#import RPi.GPIO as GPIO
 
 HTML_TEMPLATE = """
 <html>
@@ -24,8 +23,8 @@ HTML_TEMPLATE = """
         }}
         
         .light-lit {{
-            color: #FF0000;
-            background-color: #FFFF00;
+            color: #FFFFFF;
+            background-color: #FF4500;
         }}
     </style>
 </head>
@@ -110,10 +109,15 @@ HTML_TEMPLATE = """
 """
 
 LIGHT_MAP = {
-    1: 3,
-    2: 5,
-    3: 7,
-    4: 11
+    0: 3,
+    1: 5,
+    2: 7,
+    3: 11,
+    4: 13,
+    5: 15,
+    6: 19,
+    7: 21,
+    8: 23
 }
 
 LIGHT_STATE_CLASS_MAP = {
@@ -139,34 +143,27 @@ def application(environ, start_response):
         elif init_action == 0:
             board_cleanup()
     
+    # Get the current light states
+    current_light_states = read_light_state_file()
+    
     # Light on/off
     if ("action" in args) and ("candle" in args):
         action = int(args["action"][0])
         candle = int(args["candle"][0])
         
         if action == 1:
-            light_on(candle)
+            #light_on(candle)
+            current_light_states[candle] = True
         elif action == 0:
-            light_off(candle)
-    
-    # Get the current light states
-    current_light_states = [
-        #get_light_state(0),
-        0,
-        get_light_state(1),
-        get_light_state(2),
-        get_light_state(3),
-        get_light_state(4),
-        #get_light_state(5),
-        #get_light_state(6),
-        #get_light_state(7),
-        #get_light_state(8)
-        0,
-        0,
-        0,
-        0
-    ]
-    
+            #light_off(candle)
+            current_light_states[candle] = False
+        
+        # Output the new states
+        json_string = json.dumps(current_light_states)
+        fh = open("/var/www/html/menorah/light_states.txt", "w")
+        fh.write(json_string)
+        fh.close()
+
     # Output the page
     output = HTML_TEMPLATE.format(
         light_state_8 = LIGHT_STATE_CLASS_MAP[current_light_states[8]],
@@ -217,3 +214,15 @@ def get_light_state(light_number):
     light_state_int = int(light_state.strip())
     
     return light_state_int
+
+def read_light_state_file():
+    #new_light_states = [False, False, False, False, False, False, False, False, False]
+    
+    fh = open("/var/www/html/menorah/light_states.txt")
+    json_string = fh.read().strip()
+    new_light_states = json.loads(json_string)
+    
+    fh.close()
+    
+    return new_light_states
+
