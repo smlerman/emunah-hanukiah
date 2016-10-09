@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /home/pi/dimmer_control.py &
+python /usr/local/bin/emunah-menorah/dimmer_control.py &

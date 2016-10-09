@@ -193,28 +193,6 @@ def board_cleanup():
     
     return "board_cleanup"
 
-def light_on(light_number):
-    pin_number = LIGHT_MAP[light_number]
-    
-    subprocess.check_call(["sudo", "/var/www/html/menorah/board_light_on.py", str(pin_number)])
-    
-    return "board_light_on"
-
-def light_off(light_number):
-    pin_number = LIGHT_MAP[light_number]
-    
-    subprocess.check_call(["sudo", "/var/www/html/menorah/board_light_off.py", str(pin_number)])
-    
-    return "board_light_off"
-
-def get_light_state(light_number):
-    pin_number = LIGHT_MAP[light_number]
-    
-    light_state = subprocess.check_output(["sudo", "/var/www/html/menorah/board_light_check.py", str(pin_number)])
-    light_state_int = int(light_state.strip())
-    
-    return light_state_int
-
 def read_light_state_file():
     #new_light_states = [False, False, False, False, False, False, False, False, False]
     
