@@ -30,5 +30,13 @@ shutil.copy2("board_cleanup.py", html_dir)
 shutil.copy2("board_init.sh", html_dir)
 shutil.copy2("menorah_page.py", html_dir)
 
+light_state_dir = os.path.join(args.tempdir, "var/www/html/menorah/light_state")
+os.mkdir(light_state_dir)
+os.chmod(light_state_dir, 0o777)
+
+module_dir = os.path.join(args.tempdir, "usr/lib/python2.7/dist-packages")
+os.makedirs(module_dir)
+shutil.copy2("menorah_functions.py", module_dir)
+
 # Build the package
 subprocess.check_call(["dpkg-deb", "--build", args.tempdir])

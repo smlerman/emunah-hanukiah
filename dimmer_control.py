@@ -4,24 +4,13 @@ import time
 
 import RPi.GPIO as GPIO
 
-LIGHT_STATES = list()
+from menorah_functions import *
 
-LIGHT_MAP = {
-    0: 3,
-    1: 5,
-    2: 7,
-    3: 11,
-    4: 13,
-    5: 15,
-    6: 19,
-    7: 21,
-    8: 23
-}
+LIGHT_STATES = list()
 
 ZERO_CROSS_COUNT = 0
 
 def zero_cross_detect(channel):
-    global ZERO_CROSS_COUNT
     ZERO_CROSS_COUNT += 1
     if ZERO_CROSS_COUNT < 2:
         return
@@ -59,25 +48,37 @@ def zero_cross_detect(channel):
         for light in light_times[light_times_list[i]]:
             GPIO.output(LIGHT_MAP[light], GPIO.LOW)
     
-
-def read_light_state_file():
-    fh = open("/var/www/html/menorah/light_states.txt")
-    json_string = fh.read().strip()
-    fh.close()
+def change_light_button_detect(channel):
+    time.sleep(3)
+    if GPIO.input(channel) == GPIO.HIGH:
+        return
     
-    new_light_states = json.loads(json_string)
+    # Find the first light that's turned off
+    first_off_light = None
+    for i in range(0,9):
+        if not LIGHT_STATES[i]:
+            first_off_light = i
     
-    return new_light_states
+    # If there is no light that's off, the button press should turn off all the lights
+    if first_off_light is None:
+        new_light_states = [False, False, False, False, False, False, False, False, False]
+    else:
+        new_light_states = LIGHT_STATES
+        new_light_states[first_off_light] = True
+    
+    write_light_state_file(new_light_states)
 
 LIGHT_STATES = read_light_state_file()
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(8, GPIO.IN)
+GPIO.setup(10, GPIO.IN, GPIO.PUD_UP)
 
 for pin in LIGHT_MAP.values():
     GPIO.setup(pin, GPIO.OUT)
 
 GPIO.add_event_detect(8, GPIO.RISING, callback=zero_cross_detect)
+GPIO.add_event_detect(10, GPIO.RISING, callback=change_light_button_detect)
 
 while True:
     time.sleep(1)

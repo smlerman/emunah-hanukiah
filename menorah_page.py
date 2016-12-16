@@ -1,6 +1,7 @@
-import json
 import subprocess
 import urlparse
+
+from menorah_functions import *
 
 HTML_TEMPLATE = """
 <html>
@@ -108,18 +109,6 @@ HTML_TEMPLATE = """
 </html>
 """
 
-LIGHT_MAP = {
-    0: 3,
-    1: 5,
-    2: 7,
-    3: 11,
-    4: 13,
-    5: 15,
-    6: 19,
-    7: 21,
-    8: 23
-}
-
 LIGHT_STATE_CLASS_MAP = {
     0: "light-unlit",
     1: "light-lit",
@@ -159,10 +148,7 @@ def application(environ, start_response):
             current_light_states[candle] = False
         
         # Output the new states
-        json_string = json.dumps(current_light_states)
-        fh = open("/var/www/html/menorah/light_states.txt", "w")
-        fh.write(json_string)
-        fh.close()
+        write_light_state_file(current_light_states)
 
     # Output the page
     output = HTML_TEMPLATE.format(
@@ -184,23 +170,11 @@ def application(environ, start_response):
     return [output]
 
 def board_init():
-    subprocess.check_call(["sudo", "/var/www/html/menorah/board_init.sh"])
+    subprocess.check_call(["sudo", "bash", "/var/www/html/menorah/board_init.sh"])
     
     return "board_init"
 
 def board_cleanup():
-    subprocess.check_call(["sudo", "/var/www/html/menorah/board_cleanup.py"])
+    subprocess.check_call(["sudo", "python", "/var/www/html/menorah/board_cleanup.py"])
     
     return "board_cleanup"
-
-def read_light_state_file():
-    #new_light_states = [False, False, False, False, False, False, False, False, False]
-    
-    fh = open("/var/www/html/menorah/light_states.txt")
-    json_string = fh.read().strip()
-    new_light_states = json.loads(json_string)
-    
-    fh.close()
-    
-    return new_light_states
-
