@@ -29,6 +29,8 @@ os.makedirs(html_dir)
 shutil.copy2("board_cleanup.py", html_dir)
 shutil.copy2("board_init.sh", html_dir)
 shutil.copy2("menorah_page.py", html_dir)
+os.chmod(os.path.join(html_dir, "board_cleanup.py"), 0o700)
+os.chmod(os.path.join(html_dir, "board_init.sh"), 0o700)
 
 light_state_dir = os.path.join(args.tempdir, "var/www/html/menorah/light_state")
 os.mkdir(light_state_dir)

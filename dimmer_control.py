@@ -1,4 +1,3 @@
-import json
 import random
 import time
 
@@ -11,6 +10,7 @@ LIGHT_STATES = list()
 ZERO_CROSS_COUNT = 0
 
 def zero_cross_detect(channel):
+    global ZERO_CROSS_COUNT
     ZERO_CROSS_COUNT += 1
     if ZERO_CROSS_COUNT < 2:
         return
@@ -49,7 +49,6 @@ def zero_cross_detect(channel):
             GPIO.output(LIGHT_MAP[light], GPIO.LOW)
     
 def change_light_button_detect(channel):
-    time.sleep(3)
     if GPIO.input(channel) == GPIO.HIGH:
         return
     
