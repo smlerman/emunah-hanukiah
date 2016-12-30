@@ -13,7 +13,7 @@ LIGHT_MAP = {
     8: 23
 }
 
-LIGHT_STATES_FILE_PATH = "/var/www/html/menorah/light_state/light_states.txt"
+LIGHT_STATES_FILE_PATH = "/var/www/emunah-menorah/light_state/light_states.txt"
 
 def read_light_state_file():
     # If the light states file doesn't exist, create it and set all lights to off
