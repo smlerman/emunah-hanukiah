@@ -1,9 +1,13 @@
+Source: emunah-menorah
+Section: base
+Priority: optional
+Maintainer: Scott Lerman <smlerman@gmail.com>
+Build-Depends: debhelper (>= 8), dh-systemd (>= 1.5)
+
 Package: emunah-menorah
-Version: 0.0.3
 Section: base
 Priority: optional
 Architecture: all
 Depends: apache2 (>= 2.4.0), libapache2-mod-wsgi (>= 4.3.0)
-Maintainer: Scott Lerman <smlerman@gmail.com>
 Description: Emunah Menorah
  Scripts for controlling the Temple Emunah Menorah

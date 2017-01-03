@@ -17,4 +17,6 @@ if os.path.exists(args.tempdir):
 shutil.copytree("package_files", args.tempdir, symlinks=True)
 
 # Build the package
-subprocess.check_call(["dpkg-deb", "--build", args.tempdir])
+#subprocess.check_call(["dpkg-deb", "--build", args.tempdir])
+os.chdir(args.tempdir)
+subprocess.check_call(["dpkg-buildpackage", "-A", "-us", "-uc"])

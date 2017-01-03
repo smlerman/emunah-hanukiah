@@ -1,0 +1,13 @@
+[Unit]
+Description=Emunah Menorah Light Controller
+Documentation=man:emunah-menorah(1)
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/emunah-menorah/dimmer_control.py
+ExecStop=/usr/local/bin/emunah-menorah/dimmer_control.py stop
+ExecReload=/usr/local/bin/emunah-menorah/dimmer_control.py reload
+PIDFile=/var/run/emunah-menorah/emunah-menorah.pid
+Restart=always
+ 
