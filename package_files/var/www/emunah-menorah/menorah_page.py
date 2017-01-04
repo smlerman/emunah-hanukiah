@@ -170,11 +170,7 @@ def application(environ, start_response):
     return [output]
 
 def board_init():
-    subprocess.check_call(["sudo", "/usr/local/bin/emunah-menorah/board_init.sh"])
-    
-    return "board_init"
+    subprocess.check_call(["sudo", "/bin/systemctl", "restart", "emunah-menorah"])
 
 def board_cleanup():
-    subprocess.check_call(["sudo", "/usr/local/bin/emunah-menorah/board_cleanup.py"])
-    
-    return "board_cleanup"
+    subprocess.check_call(["sudo", "/bin/systemctl", "stop", "emunah-menorah"])

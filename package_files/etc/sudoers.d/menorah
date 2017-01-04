@@ -1,4 +1,4 @@
-# Allow web pages to start and stop the light control program, dimmer_control.py
+# Allow web pages to start and stop the light control service, emunah-menorah
 
-www-data ALL = NOPASSWD: /var/www/html/menorah/board_init.sh
-www-data ALL = NOPASSWD: /var/www/html/menorah/board_cleanup.py
+www-data ALL = NOPASSWD: /bin/systemctl restart emunah-menorah
+www-data ALL = NOPASSWD: /bin/systemctl stop emunah-menorah

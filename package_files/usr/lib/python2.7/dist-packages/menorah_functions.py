@@ -1,6 +1,8 @@
 import json
 import os
 
+import RPi.GPIO as GPIO
+
 LIGHT_MAP = {
     0: 3,
     1: 5,
@@ -35,3 +37,11 @@ def write_light_state_file(new_light_states):
     fh.write(json_string)
     fh.close()
  
+def board_cleanup():
+    GPIO.setmode(GPIO.BOARD)
+
+    for pin in LIGHT_MAP.values():
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, GPIO.LOW)
+
+    GPIO.cleanup()

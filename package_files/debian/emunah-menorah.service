@@ -4,10 +4,9 @@ Documentation=man:emunah-menorah(1)
 After=network.target
 
 [Service]
-Type=forking
-ExecStart=/usr/local/bin/emunah-menorah/dimmer_control.py
-ExecStop=/usr/local/bin/emunah-menorah/dimmer_control.py stop
-ExecReload=/usr/local/bin/emunah-menorah/dimmer_control.py reload
+Type=simple
+ExecStart=/usr/bin/emunah-menorah/dimmer_control.py
+ExecStop=/bin/kill -s SIGQUIT $MAINPID
 PIDFile=/var/run/emunah-menorah/emunah-menorah.pid
 Restart=always
- 
+RestartSec=30

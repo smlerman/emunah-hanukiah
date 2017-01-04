@@ -1,4 +1,8 @@
+#!/usr/bin/python3
+
 import random
+import signal
+import sys
 import time
 
 import RPi.GPIO as GPIO
@@ -7,12 +11,15 @@ from menorah_functions import *
 
 LIGHT_STATES = list()
 
+PERIODS_PER_SECOND = 60
+ZERO_CROSS_COUNT_MAX = (120 / PERIODS_PER_SECOND)
+
 ZERO_CROSS_COUNT = 0
 
 def zero_cross_detect(channel):
     global ZERO_CROSS_COUNT
     ZERO_CROSS_COUNT += 1
-    if ZERO_CROSS_COUNT < 2:
+    if ZERO_CROSS_COUNT < ZERO_CROSS_COUNT_MAX:
         return
     
     ZERO_CROSS_COUNT = 0
@@ -67,6 +74,10 @@ def change_light_button_detect(channel):
     
     write_light_state_file(new_light_states)
 
+def sigquit_handler(a, b):
+    board_cleanup()
+    sys.exit(0)
+
 LIGHT_STATES = read_light_state_file()
 
 GPIO.setmode(GPIO.BOARD)
@@ -78,6 +89,8 @@ for pin in LIGHT_MAP.values():
 
 GPIO.add_event_detect(8, GPIO.RISING, callback=zero_cross_detect)
 GPIO.add_event_detect(10, GPIO.RISING, callback=change_light_button_detect)
+
+signal.signal(signal.SIGQUIT, sigquit_handler)
 
 while True:
     time.sleep(1)
