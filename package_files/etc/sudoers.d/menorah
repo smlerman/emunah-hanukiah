@@ -1,4 +1,6 @@
 # Allow web pages to start and stop the light control service, emunah-menorah
 
+www-data ALL = NOPASSWD: /bin/systemctl start emunah-menorah
 www-data ALL = NOPASSWD: /bin/systemctl restart emunah-menorah
 www-data ALL = NOPASSWD: /bin/systemctl stop emunah-menorah
+www-data ALL = NOPASSWD: /bin/systemctl reload emunah-menorah

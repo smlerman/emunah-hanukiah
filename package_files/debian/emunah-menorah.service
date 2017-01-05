@@ -7,6 +7,10 @@ After=network.target
 Type=simple
 ExecStart=/usr/bin/emunah-menorah/dimmer_control.py
 ExecStop=/bin/kill -s SIGQUIT $MAINPID
+ExecReload=/bin/kill -s SIGHUP $MAINPID
 PIDFile=/var/run/emunah-menorah/emunah-menorah.pid
 Restart=always
 RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

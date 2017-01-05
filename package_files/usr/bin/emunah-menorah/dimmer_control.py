@@ -78,6 +78,10 @@ def sigquit_handler(a, b):
     board_cleanup()
     sys.exit(0)
 
+def sighup_handler(a, b):
+    global LIGHT_STATES
+    LIGHT_STATES = read_light_state_file()
+
 LIGHT_STATES = read_light_state_file()
 
 GPIO.setmode(GPIO.BOARD)
@@ -91,7 +95,8 @@ GPIO.add_event_detect(8, GPIO.RISING, callback=zero_cross_detect)
 GPIO.add_event_detect(10, GPIO.RISING, callback=change_light_button_detect)
 
 signal.signal(signal.SIGQUIT, sigquit_handler)
+signal.signal(signal.SIGHUP, sighup_handler)
 
 while True:
-    time.sleep(1)
+    time.sleep(30)
     LIGHT_STATES = read_light_state_file()

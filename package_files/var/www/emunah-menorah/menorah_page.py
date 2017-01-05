@@ -102,9 +102,9 @@ HTML_TEMPLATE = """
         </tr>
     </table>
     <br/><br/><br/>
-    <a href="/menorah?init=1">Init</a>
+    <a href="/menorah?service=1">Restart</a>
     <br/><br/><br/>
-    <a href="/menorah?init=0">Cleanup</a>
+    <a href="/menorah?service=0">Stop</a>
 </body>
 </html>
 """
@@ -124,13 +124,13 @@ def application(environ, start_response):
         raise e
     
     # Init and cleanup
-    if "init" in args:
-        init_action = int(args["init"][0])
+    if "service" in args:
+        init_action = int(args["service"][0])
         
         if init_action == 1:
-            board_init()
+            restart_service()
         elif init_action == 0:
-            board_cleanup()
+            stop_service()
     
     # Get the current light states
     current_light_states = read_light_state_file()
@@ -141,14 +141,15 @@ def application(environ, start_response):
         candle = int(args["candle"][0])
         
         if action == 1:
-            #light_on(candle)
             current_light_states[candle] = True
         elif action == 0:
-            #light_off(candle)
             current_light_states[candle] = False
         
         # Output the new states
         write_light_state_file(current_light_states)
+        
+        # Send a reload command to the service
+        subprocess.check_call(["sudo", "/bin/systemctl", "reload", "emunah-menorah"])
 
     # Output the page
     output = HTML_TEMPLATE.format(
@@ -169,8 +170,8 @@ def application(environ, start_response):
     
     return [output]
 
-def board_init():
+def restart_service():
     subprocess.check_call(["sudo", "/bin/systemctl", "restart", "emunah-menorah"])
 
-def board_cleanup():
+def stop_service():
     subprocess.check_call(["sudo", "/bin/systemctl", "stop", "emunah-menorah"])
