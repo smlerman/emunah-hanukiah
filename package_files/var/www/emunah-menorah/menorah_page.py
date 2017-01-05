@@ -149,7 +149,7 @@ def application(environ, start_response):
         write_light_state_file(current_light_states)
         
         # Send a reload command to the service
-        subprocess.check_call(["sudo", "/bin/systemctl", "reload", "emunah-menorah"])
+        reload_service()
 
     # Output the page
     output = HTML_TEMPLATE.format(
@@ -169,9 +169,3 @@ def application(environ, start_response):
     start_response(status, response_headers)
     
     return [output]
-
-def restart_service():
-    subprocess.check_call(["sudo", "/bin/systemctl", "restart", "emunah-menorah"])
-
-def stop_service():
-    subprocess.check_call(["sudo", "/bin/systemctl", "stop", "emunah-menorah"])

@@ -45,3 +45,12 @@ def board_cleanup():
         GPIO.output(pin, GPIO.LOW)
 
     GPIO.cleanup()
+
+def restart_service():
+    subprocess.check_call(["sudo", "/bin/systemctl", "restart", "emunah-menorah"])
+
+def stop_service():
+    subprocess.check_call(["sudo", "/bin/systemctl", "stop", "emunah-menorah"])
+
+def reload_service():
+    subprocess.check_call(["sudo", "/bin/systemctl", "reload", "emunah-menorah"])
