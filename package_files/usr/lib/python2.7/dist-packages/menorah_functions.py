@@ -19,16 +19,16 @@ LIGHT_MAP = {
 LIGHT_STATES_FILE_PATH = "/var/www/emunah-menorah/light_state/light_states.txt"
 
 def read_light_state_file():
-    # If the light states file doesn't exist, create it and set all lights to off
-    if not os.path.exists(LIGHT_STATES_FILE_PATH):
+    # If the light states file exists, read the light states from it, otherwise create it and set all lights to off
+    if os.path.exists(LIGHT_STATES_FILE_PATH):
+        fh = open(LIGHT_STATES_FILE_PATH)
+        json_string = fh.read().strip()
+        fh.close()
+        
+        new_light_states = json.loads(json_string)
+    else:
         new_light_states = [False, False, False, False, False, False, False, False, False]
         write_light_state_file(new_light_states)
-    
-    fh = open(LIGHT_STATES_FILE_PATH)
-    json_string = fh.read().strip()
-    new_light_states = json.loads(json_string)
-    
-    fh.close()
     
     return new_light_states
 

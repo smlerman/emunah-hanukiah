@@ -14,8 +14,8 @@ LIGHT_STATES = list()
 PERIODS_PER_SECOND = 60
 ZERO_CROSS_COUNT_MAX = (120 / PERIODS_PER_SECOND)
 
-FLICKER_TIME_FRACTION = 1.0/30.0
-REGULAR_ON_TIME = 0.013333
+FLICKER_TIME_FRACTION = 1.0/20.0
+REGULAR_ON_TIME = 0.015
 
 ZERO_CROSS_COUNTER = 0
 
@@ -58,7 +58,6 @@ def zero_cross_detect(channel):
                 FLICKER_TICK_COUNT[i] -= 2
                 
                 # Full time for this is 0.01666 seconds
-                #random_time = random.uniform(0.002777, 0.008333)
                 random_time = random.uniform(0.005555, 0.016666)
             else:
                 random_time = REGULAR_ON_TIME
@@ -85,12 +84,12 @@ def zero_cross_detect(channel):
             GPIO.output(LIGHT_MAP[light], GPIO.LOW)
     
 # Handle SIGQUIT, sent by systemctl stop
-def sigquit_handler(a, b):
+def sigquit_handler(signum, stack_frame):
     board_cleanup()
     sys.exit(0)
 
 # Handle SIGHUP, sent by systemctl reload
-def sighup_handler(a, b):
+def sighup_handler(signum, stack_frame):
     global LIGHT_STATES
     LIGHT_STATES = read_light_state_file()
 
