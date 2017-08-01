@@ -1,5 +1,23 @@
+emunah-menorah (0.3) experimental; urgency=low
+
+  * First public version; used for 2017 Torch Award
+
+ -- Scott Lerman <smlerman@gmail.com>  Thu, 20 Apr 2017 14:45:00 -0400
+
+emunah-menorah (0.2.1) experimental; urgency=low
+
+  * Some updates for the 2016 version
+
+ -- Scott Lerman <smlerman@gmail.com>  Tue, 3 Jan 2017 16:27:05 -0500
+
+emunah-menorah (0.2) experimental; urgency=low
+
+  * Version used for the menorah in 2016
+
+ -- Scott Lerman <smlerman@gmail.com>  Tue, 3 Jan 2017 16:27:05 -0500
+
 emunah-menorah (0.1) experimental; urgency=low
 
-  * Fake entry
+  * Version used for the menorah in 2015
 
  -- Scott Lerman <smlerman@gmail.com>  Tue, 3 Jan 2017 16:27:05 -0500

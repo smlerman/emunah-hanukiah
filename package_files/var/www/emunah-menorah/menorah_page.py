@@ -109,19 +109,17 @@ HTML_TEMPLATE = """
 </html>
 """
 
+# CSS classes for indicators
 LIGHT_STATE_CLASS_MAP = {
     0: "light-unlit",
     1: "light-lit",
 }
 
 def application(environ, start_response):
-    status = '200 OK'
-    
     try:
         args = urlparse.parse_qs(environ["QUERY_STRING"])
     except Exception as e:
         args = dict()
-        raise e
     
     # Init and cleanup
     if "service" in args:
@@ -164,6 +162,7 @@ def application(environ, start_response):
         light_state_1 = LIGHT_STATE_CLASS_MAP[current_light_states[1]]
     )
     
+    status = '200 OK'
     response_headers = [('Content-type', 'text/html'),
                         ('Content-Length', str(len(output)))]
     start_response(status, response_headers)

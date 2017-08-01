@@ -4,6 +4,7 @@ import subprocess
 
 import RPi.GPIO as GPIO
 
+# Dictionary of light number => GPIO pin
 LIGHT_MAP = {
     0: 3,
     1: 5,
@@ -40,7 +41,8 @@ def write_light_state_file(new_light_states):
  
 def board_cleanup():
     GPIO.setmode(GPIO.BOARD)
-
+    
+    # Turn off all of the lights
     for pin in LIGHT_MAP.values():
         GPIO.setup(pin, GPIO.OUT)
         GPIO.output(pin, GPIO.LOW)
