@@ -1,0 +1,15 @@
+[Unit]
+Description=Emunah Menorah Wii Remote Handler
+Documentation=man:emunah-menorah(1)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/emunah-menorah/wii_remote_handler.py
+ExecStop=/bin/kill -s SIGQUIT $MAINPID
+PIDFile=/var/run/emunah-menorah/emunah-menorah-wiimote.pid
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

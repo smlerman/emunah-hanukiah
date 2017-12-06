@@ -1,3 +1,11 @@
 #!/bin/sh
 
 chown -R www-data:www-data /var/www/emunah-menorah/light_state/
+
+rm /etc/apache2/sites-enabled/000-default.conf
+
+systemctl enable emunah-menorah.service
+systemctl enable emunah-menorah-wiimote.service
+
+systemctl start emunah-menorah.service
+systemctl start emunah-menorah-wiimote.service

@@ -8,6 +8,6 @@ Package: emunah-menorah
 Section: base
 Priority: optional
 Architecture: all
-Depends: apache2 (>= 2.4.0), libapache2-mod-wsgi-py3 (>= 4.3.0)
+Depends: apache2 (>= 2.4.0), libapache2-mod-wsgi-py3 (>= 4.3.0), python-cwiid (>= 0.6.0)
 Description: Emunah Menorah
  Scripts for controlling the Temple Emunah Menorah
