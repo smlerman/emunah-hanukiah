@@ -1,5 +1,5 @@
 import subprocess
-import urlparse
+import urllib.parse
 
 from menorah_functions import *
 
@@ -105,6 +105,8 @@ HTML_TEMPLATE = """
     <a href="/menorah?service=1">Restart</a>
     <br/><br/><br/>
     <a href="/menorah?service=0">Stop</a>
+    <br/><br/><br/>
+    <a href="/menorah?service=2">Refresh Lights</a>
 </body>
 </html>
 """
@@ -117,18 +119,20 @@ LIGHT_STATE_CLASS_MAP = {
 
 def application(environ, start_response):
     try:
-        args = urlparse.parse_qs(environ["QUERY_STRING"])
+        args = urllib.parse.parse_qs(environ["QUERY_STRING"])
     except Exception as e:
         args = dict()
     
     # Init and cleanup
     if "service" in args:
-        init_action = int(args["service"][0])
+        service_action = int(args["service"][0])
         
-        if init_action == 1:
-            restart_service()
-        elif init_action == 0:
+        if service_action == 0:
             stop_service()
+        elif service_action == 1:
+            restart_service()
+        elif service_action == 2:
+            reload_service()
     
     # Get the current light states
     current_light_states = read_light_state_file()
@@ -148,7 +152,7 @@ def application(environ, start_response):
         
         # Send a reload command to the service
         reload_service()
-
+    
     # Output the page
     output = HTML_TEMPLATE.format(
         light_state_8 = LIGHT_STATE_CLASS_MAP[current_light_states[8]],
@@ -160,7 +164,7 @@ def application(environ, start_response):
         light_state_3 = LIGHT_STATE_CLASS_MAP[current_light_states[3]],
         light_state_2 = LIGHT_STATE_CLASS_MAP[current_light_states[2]],
         light_state_1 = LIGHT_STATE_CLASS_MAP[current_light_states[1]]
-    )
+    ).encode()
     
     status = '200 OK'
     response_headers = [('Content-type', 'text/html'),
