@@ -17,7 +17,7 @@ ZERO_CROSS_COUNTER = 0
 ZERO_CROSS_COUNT_MAX = 2
 
 # Values to control how the lights flicker
-FLICKER_TIME_FRACTION = 1.0/20.0
+FLICKER_TIME_FRACTION = 1.0/15.0
 REGULAR_ON_TIME = 0.015
 
 # Check for putting a light in "flicker" state every 1/10 of a second (12 ticks)
@@ -111,12 +111,14 @@ GPIO.setup(8, GPIO.IN)
 for pin in LIGHT_MAP.values():
     GPIO.setup(pin, GPIO.OUT)
 
-GPIO.add_event_detect(8, GPIO.RISING, callback=zero_cross_detect)
+#GPIO.add_event_detect(8, GPIO.RISING, callback=zero_cross_detect)
 
 signal.signal(signal.SIGQUIT, sigquit_handler)
 signal.signal(signal.SIGHUP, sighup_handler)
 
 # Read the light state file every 30 seconds, in case it was edited outside of the web page
 while True:
-    time.sleep(30)
-    LIGHT_STATES = read_light_state_file()
+    time.sleep(1.0/120)
+    zero_cross_detect(0)
+    #time.sleep(30)
+    #LIGHT_STATES = read_light_state_file()

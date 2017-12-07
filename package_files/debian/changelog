@@ -1,3 +1,9 @@
+emunah-menorah (0.4) experimental; urgency=low
+
+  * Used for Hanukah 2017
+
+ -- Scott Lerman <smlerman@gmail.com>  Tue, 12 Dec 2017 00:00:00 -0500
+
 emunah-menorah (0.3) experimental; urgency=low
 
   * First public version; used for 2017 Torch Award
