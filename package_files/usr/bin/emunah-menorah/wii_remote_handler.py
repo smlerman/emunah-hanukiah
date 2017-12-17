@@ -56,6 +56,9 @@ class WiiRemote():
         
         return
     
+    def close(self):
+        self.wiimote.close()
+    
     @staticmethod
     def message_callback(message_list, message_time):
         for message in message_list:
