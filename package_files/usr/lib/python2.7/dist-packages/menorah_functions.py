@@ -1,7 +1,9 @@
+import datetime
 import json
 import os
 import subprocess
 
+import hdate
 import RPi.GPIO as GPIO
 
 # Dictionary of light number => GPIO pin
@@ -39,13 +41,49 @@ def write_light_state_file(new_light_states):
     fh.write(json_string)
     fh.close()
 
-def turn_on_next_light():
+def get_current_day(current_datetime = None):
+    if current_datetime is None:
+        current_datetime = datetime.datetime.now()
+    
+    current_date = current_datetime.date()
+    
+    current_hdate = hdate.Hdate()
+    current_hdate.set_gdate(current_date.day, current_date.month, current_date.year)
+    current_hdate.set_location(42.420758, -71.227494, -5)
+    
+    # Use 1 hour before sunset
+    sunset_timedelta = datetime.timedelta(minutes=current_hdate.get_sunset() - 60)
+    sunset_datetime = datetime.datetime.combine(current_date, datetime.time()) + sunset_timedelta
+    
+    if current_datetime >= sunset_datetime:
+        current_date = current_date + datetime.timedelta(1)
+    
+    hdate_first_hanukah = hdate.Hdate()
+    hdate_first_hanukah.set_gdate(current_date.day, current_date.month, current_date.year)
+    # First candle is the night following 24 Kislev
+    hdate_first_hanukah.set_hdate(24, 3, hdate_first_hanukah.get_hyear())
+    
+    date_first_hanukah = datetime.date(hdate_first_hanukah.get_gyear(), hdate_first_hanukah.get_gmonth(), hdate_first_hanukah.get_gday())
+    
+    current_day_timedelta = current_date - date_first_hanukah
+    current_day = current_day_timedelta.days
+    
+    return current_day
+
+def turn_on_next_light(current_day = None):
     # Get the current light states
     current_light_states = read_light_state_file()
     
     # Find the first light that's off and turn it on
     next_light_found = False
-    for candle in range(0, len(current_light_states)):
+    
+    if current_day is not None:
+        # Count down from the current day to 0
+        candle_list = [0] + list(range(current_day, 0, -1))
+    else:
+        candle_list = range(0, len(current_light_states))
+    
+    for candle in candle_list:
         if current_light_states[candle] == False:
             current_light_states[candle] = True
             next_light_found = True
