@@ -87,29 +87,6 @@ class WiiRemote():
                 del WiiRemote.remotes[1]
                 WiiRemote.listen()
                 return
-    
-    @staticmethod
-    def turn_on_next_light():
-        # Get the current light states
-        current_light_states = read_light_state_file()
-        
-        # Find the first light that's off and turn it on
-        next_light_found = False
-        for candle in range(0, len(current_light_states)):
-            if current_light_states[candle] == False:
-                current_light_states[candle] = True
-                next_light_found = True
-                break
-        
-        # If all of the lights are on, turn them all off
-        if not next_light_found:
-            current_light_states = new_light_states = [False, False, False, False, False, False, False, False, False]
-        
-        # Output the new states
-        write_light_state_file(current_light_states)
-        
-        # Send a reload command to the service
-        reload_service()
 
 # Handle SIGQUIT, sent by systemctl stop
 def sigquit_handler(signum, stack_frame):
