@@ -41,6 +41,30 @@ def write_light_state_file(new_light_states):
     fh.write(json_string)
     fh.close()
 
+def turn_on_light(light_number):
+    # Get the current light states
+    current_light_states = read_light_state_file()
+    
+    current_light_states[light_number] = True
+    
+    # Output the new states
+    write_light_state_file(current_light_states)
+    
+    # Send a reload command to the service
+    reload_service()
+    
+def turn_off_light(light_number):
+    # Get the current light states
+    current_light_states = read_light_state_file()
+    
+    current_light_states[light_number] = False
+    
+    # Output the new states
+    write_light_state_file(current_light_states)
+    
+    # Send a reload command to the service
+    reload_service()
+    
 def get_current_day(current_datetime = None):
     if current_datetime is None:
         current_datetime = datetime.datetime.now()

@@ -5,7 +5,7 @@ import signal
 import sys
 import time
 
-from menorah_functions import *
+import menorah_functions
 
 class WiiRemote():
     # Accelerometer reading required to trigger a light change
@@ -14,6 +14,8 @@ class WiiRemote():
     remotes = {1: None, 2: None, 3: None, 4: None}
     
     last_message_time = time.time()
+    
+    selected_light = 0
     
     @staticmethod
     def listen():
@@ -43,6 +45,9 @@ class WiiRemote():
         Called after a successful pairing
         Vibrates the remote and blinks the LEDs, then turns on LED1
         """
+        # Allow an extra second for the connection to be setup
+        time.sleep(1)
+        
         self.wiimote.rumble = True
         
         leds = [cwiid.LED1_ON, cwiid.LED2_ON, cwiid.LED3_ON, cwiid.LED4_ON]
@@ -54,7 +59,15 @@ class WiiRemote():
         self.wiimote.rumble = False
         self.wiimote.led = cwiid.LED1_ON
         
+        print("Battery: %2.1f%%" % (100 * float(self.wiimote.state["battery"]) / cwiid.BATTERY_MAX))
+        
         return
+    
+    def selected_light_to_leds(self):
+        if WiiRemote.selected_light == 0:
+            self.wiimote.led = 15
+        else:
+            self.wiimote.led = WiiRemote.selected_light
     
     def close(self):
         self.wiimote.close()
@@ -73,20 +86,42 @@ class WiiRemote():
                 
                 # If any of the accelerometer reading for any direction exceeds the threshold, trigger a light change
                 if (acc_x > WiiRemote.ACC_THRESHOLD) or (acc_y > WiiRemote.ACC_THRESHOLD) or (acc_z > WiiRemote.ACC_THRESHOLD):
-                    # Check only once every 3 seconds
-                    if message_time > WiiRemote.last_message_time + 3:
+                    # Check only once every 2 seconds
+                    if message_time > WiiRemote.last_message_time + 2:
                         WiiRemote.last_message_time = message_time
-                        WiiRemote.turn_on_next_light()
+                        menorah_functions.turn_on_next_light()
             elif message_type == cwiid.MESG_BTN:
+                WiiRemote.last_message_time = message_time
                 if message_data == cwiid.BTN_A:
-                    WiiRemote.last_message_time = message_time
-                    WiiRemote.turn_on_next_light()
+                    menorah_functions.turn_on_next_light()
+                elif message_data == cwiid.BTN_LEFT:
+                    WiiRemote.selected_light += 1
+                    
+                    if WiiRemote.selected_light > 8:
+                        WiiRemote.selected_light = 0
+                    
+                    WiiRemote.remotes[1].selected_light_to_leds()
+                elif message_data == cwiid.BTN_RIGHT:
+                    WiiRemote.selected_light -= 1
+                    
+                    if WiiRemote.selected_light < 0:
+                        WiiRemote.selected_light = 8
+                    
+                    WiiRemote.remotes[1].selected_light_to_leds()
+                elif message_data == cwiid.BTN_UP:
+                    menorah_functions.turn_on_light(WiiRemote.selected_light)
+                elif message_data == cwiid.BTN_DOWN:
+                    menorah_functions.turn_off_light(WiiRemote.selected_light)
+                
             elif message_type == cwiid.MESG_ERROR:
                 #if message_data == cwiid.ERROR_DISCONNECT:
                 WiiRemote.remotes[1].close()
                 del WiiRemote.remotes[1]
                 WiiRemote.listen()
                 return
+            
+            else:
+                print(message)
 
 # Handle SIGQUIT, sent by systemctl stop
 def sigquit_handler(signum, stack_frame):
