@@ -94,15 +94,16 @@ def get_current_day(current_datetime = None):
     
     return current_day
 
-def turn_on_next_light(current_day = None):
+def turn_on_next_light(use_current_day = False):
     # Get the current light states
     current_light_states = read_light_state_file()
     
     # Find the first light that's off and turn it on
     next_light_found = False
     
-    if current_day is not None:
+    if use_current_day:
         # Count down from the current day to 0
+        current_day = get_current_day()
         candle_list = [0] + list(range(current_day, 0, -1))
     else:
         candle_list = range(0, len(current_light_states))

@@ -89,11 +89,13 @@ class WiiRemote():
                     # Check only once every 2 seconds
                     if message_time > WiiRemote.last_message_time + 2:
                         WiiRemote.last_message_time = message_time
-                        menorah_functions.turn_on_next_light()
+                        menorah_functions.turn_on_next_light(True)
             elif message_type == cwiid.MESG_BTN:
                 WiiRemote.last_message_time = message_time
                 if message_data == cwiid.BTN_A:
-                    menorah_functions.turn_on_next_light()
+                    menorah_functions.turn_on_next_light(True)
+                elif message_data == cwiid.BTN_B:
+                    menorah_functions.turn_on_next_light(False)
                 elif message_data == cwiid.BTN_LEFT:
                     WiiRemote.selected_light += 1
                     
