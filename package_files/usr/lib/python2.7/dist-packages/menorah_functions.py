@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import subprocess
+import sys
 
 if sys.version_info.major == 2:
     import hdate
@@ -66,7 +67,19 @@ def turn_off_light(light_number):
     
     # Send a reload command to the service
     reload_service()
+
+def toggle_light(light_number):
+    # Get the current light states
+    current_light_states = read_light_state_file()
     
+    current_light_states[light_number] = not current_light_states[light_number]
+    
+    # Output the new states
+    write_light_state_file(current_light_states)
+    
+    # Send a reload command to the service
+    reload_service()
+
 def get_current_day(current_datetime = None):
     if current_datetime is None:
         current_datetime = datetime.datetime.now()
