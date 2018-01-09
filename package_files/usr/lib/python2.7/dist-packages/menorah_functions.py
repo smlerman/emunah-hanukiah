@@ -3,7 +3,9 @@ import json
 import os
 import subprocess
 
-import hdate
+if sys.version_info.major == 2:
+    import hdate
+
 import RPi.GPIO as GPIO
 
 # Dictionary of light number => GPIO pin
