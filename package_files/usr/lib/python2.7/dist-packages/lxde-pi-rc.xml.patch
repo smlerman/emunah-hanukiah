@@ -1,0 +1,55 @@
+--- lxde-pi-rc.xml      2017-12-07 00:35:09.250669826 +0000
++++ lxde-pi-rc.xml      2018-01-09 01:26:46.758544615 +0000
+@@ -356,6 +356,52 @@
+         <command>lxterminal</command>
+       </action>
+     </keybind>
++    <!-- Keybindings for Emunah Hanukiah -->
++    <keybind key="C-A-0">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 0</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-1">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 1</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-2">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 2</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-3">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 3</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-4">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 4</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-5">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 5</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-6">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 6</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-7">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 7</command>
++      </action>
++    </keybind>
++    <keybind key="C-A-8">
++      <action name="Execute">
++         <command>sudo python3 /usr/bin/emunah-menorah/control_light.py -c toggle -l 8</command>
++      </action>
++    </keybind>
+   </keyboard>
+   <mouse>
+     <dragThreshold>8</dragThreshold>

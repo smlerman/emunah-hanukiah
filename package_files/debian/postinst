@@ -5,6 +5,10 @@ chown -R www-data:www-data /var/www/emunah-menorah/light_state/
 rm /etc/apache2/sites-enabled/000-default.conf
 systemctl restart apache2
 
+pushd /home/pi/.config/openbox/
+patch -p1 < /usr/lib/python2.7/dist-packages/lxde-pi-rc.xml.patch
+popd
+
 systemctl enable emunah-menorah.service
 systemctl enable emunah-menorah-wiimote.service
 
