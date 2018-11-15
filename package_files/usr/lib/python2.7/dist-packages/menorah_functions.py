@@ -120,18 +120,25 @@ def turn_on_next_light(use_current_day = False):
         # Count down from the current day to 0
         current_day = get_current_day()
         candle_list = [0] + list(range(current_day, 0, -1))
+        
+        # If lights 0 and 1 are on, then all of the lights for the current/previous day have been turned on,
+        #  so the next step is to turn all of the lights off
+        if (current_light_states[0] == True) and (current_light_states[1] == True):
+            current_light_states = [False, False, False, False, False, False, False, False, False]
+            next_light_found = True
     else:
         candle_list = range(0, len(current_light_states))
     
-    for candle in candle_list:
-        if current_light_states[candle] == False:
-            current_light_states[candle] = True
-            next_light_found = True
-            break
+    if not next_light_found:
+        for candle in candle_list:
+            if current_light_states[candle] == False:
+                current_light_states[candle] = True
+                next_light_found = True
+                break
     
     # If all of the lights are on, turn them all off
     if not next_light_found:
-        current_light_states = new_light_states = [False, False, False, False, False, False, False, False, False]
+        current_light_states = [False, False, False, False, False, False, False, False, False]
     
     # Output the new states
     write_light_state_file(current_light_states)
