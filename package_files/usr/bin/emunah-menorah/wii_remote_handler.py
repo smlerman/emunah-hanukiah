@@ -57,7 +57,7 @@ class WiiRemote():
             time.sleep(0.5)
         
         self.wiimote.rumble = False
-        self.wiimote.led = cwiid.LED1_ON
+        self.selected_light_to_leds()
         
         print("Battery: %2.1f%%" % (100 * float(self.wiimote.state["battery"]) / cwiid.BATTERY_MAX))
         

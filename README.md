@@ -3,7 +3,9 @@ Raspberry Pi software for controlling an electric hanukiah
 
 ## Wii Remote Controls
 
-The package includes a service that listens for Bluetooth connections from a Wii Remote. In order to pair a Wii Remote, press the `1` and `2` buttons at the same time.
+The package includes a service that listens for Bluetooth connections from a Wii Remote.
+
+In order to pair a Wii Remote, press the `1` and `2` buttons at the same time. All four LEDs on the Wii Remote will blink for several seconds while the remote is pairing to the Raspberry Pi. Once the remote is paired, it will vibrate for a couple seconds and each LED will turn on and off. To unpair the remote, hold down the power button until all of the LEDs turn off.
 
 * Swing or `A` button: Turn on the next light according to the current date. This turns on lights in the traditional order, starting with 0 and then going left to right. If all of the lights that should be on for the current day are on, turn off all of the lights.
 * `B` button: Turn on the next light, i.e. the right-most light that is off. If all of the lights are on, turn all of the lights off.
